@@ -15,6 +15,8 @@ public class LibrosEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_AUTORES")
     @SequenceGenerator(name = "SEQ_AUTORES", sequenceName = "SEQ_AUTORES", allocationSize = 1)
+    @Column(name = "ID")
+    private Long id;
 
     @Column(name = "TITULO")
     private String titulo;
@@ -29,5 +31,5 @@ public class LibrosEntity {
     private String genero;
 
     @Column(name = "AUTORID")
-    private Date autorId;
+    private Long autorId;
 }

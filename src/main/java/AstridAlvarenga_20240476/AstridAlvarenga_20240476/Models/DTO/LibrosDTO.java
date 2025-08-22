@@ -1,8 +1,6 @@
 package AstridAlvarenga_20240476.AstridAlvarenga_20240476.Models.DTO;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +17,12 @@ public class LibrosDTO {
     @Size(max = 20)
     private String isbn;
 
-    @NotNull
+    @Max(value = 4) //Para que solo acepte 4 caracteres, por ejemplo años como 2025, 2024, etc
+    @Min(value = 4)
     private Long anioPublicacion;
 
-    private
+    @NotBlank
+    private String genero;
+
+    private Long autorId;
 }
