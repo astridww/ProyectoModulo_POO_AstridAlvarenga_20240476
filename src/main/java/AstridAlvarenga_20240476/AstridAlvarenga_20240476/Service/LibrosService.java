@@ -7,6 +7,7 @@ import AstridAlvarenga_20240476.AstridAlvarenga_20240476.Models.DTO.LibrosDTO;
 import AstridAlvarenga_20240476.AstridAlvarenga_20240476.Repository.LibrosRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,7 +54,33 @@ public class LibrosService {
     //Metodo para actualizar los libros (PUT)
     public LibrosDTO updateLibros(Long id, LibrosDTO librosDTO){
         //Se verificará si existe el ID
-        LibrosEntity
+        LibrosEntity librosExisting = repo.findById(id).orElseThrow(()-> new ExceptionLibrosNotFound("ID no encontrado"));
+        //Ahora se actualizan los campos
+        librosExisting.setTitulo(librosDTO.getTitulo());
+        librosExisting.setIsbn(librosDTO.getIsbn());
+        librosExisting.setAnioPublicacion(librosDTO.getAnioPublicacion());
+        librosExisting.setGenero(librosDTO.getGenero());
+        librosExisting.setAutorId(librosDTO.getAutorId());
+        //Ahora se actualizan los campos actualizados y se guardan en la base de datos
+        LibrosEntity librosUpdate = repo.save(librosExisting);
+        //Se convierten a DTO para mostrarlo en el frontend
+        return convertToDTOLibros(librosUpdate);
+    }
+
+    //Metodo para eliminar a un libro (DELETE)
+    public Boolean removeLibros(Long id){
+        try{
+            LibrosEntity librosExisting = repo.findById(id).orElse(null);
+            if (librosExisting != null){
+                repo.delete(librosExisting);
+                return true;
+            }else {
+                System.out.println("No se encontró el ID a eliminar");
+                return false;
+            }
+        }catch (EmptyResultDataAccessException e){
+            throw new EmptyResultDataAccessException("No se encontró el ID", 1);
+        }
     }
 
     private LibrosDTO convertToDTOLibros(LibrosEntity objLibrosEntity){
